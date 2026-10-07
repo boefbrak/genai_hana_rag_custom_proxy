@@ -1,0 +1,20 @@
+{
+  "// INSTRUCTIONS": "Edit values below, then run: ./setup-deployment.sh --deploy",
+
+  "USERNAME": "",
+  "REGION": "",
+  "DATABASE_ID": "",
+  "PROXY_BASE_URL": "",
+  "PROXY_API_KEY": "",
+  "CHAT_MODEL": "gpt-4o",
+  "EMBEDDING_MODEL": "text-embedding-3-large",
+
+  "// NAMING_CONVENTION": {
+    "CF_APP_SERVICE": "{USERNAME}-genai-hana-rag-srv",
+    "CF_APP_WEBAPP": "{USERNAME}-genai-hana-rag-app",
+    "CF_APP_DEPLOYER": "{USERNAME}-genai-hana-rag-db-deployer",
+    "HDI_CONTAINER": "{USERNAME}-hana-hdi-rag",
+    "SERVICE_URL": "https://{USERNAME}-genai-hana-rag-srv.cfapps.{REGION}.hana.ondemand.com",
+    "APP_URL": "https://{USERNAME}-genai-hana-rag-app.cfapps.{REGION}.hana.ondemand.com"
+  }
+}

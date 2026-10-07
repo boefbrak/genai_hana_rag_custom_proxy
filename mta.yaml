@@ -1,0 +1,73 @@
+_schema-version: "3.1"
+ID: genai-hana-rag
+description: RAG Application with SAP CAP, HANA Vector Engine, and Generative AI Hub
+version: 1.0.0
+
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  - name: genai-hana-rag-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      memory: 512M
+      disk-quota: 1024M
+    requires:
+      - name: hana-hdi-rag
+    properties:
+      PROXY_BASE_URL: "REPLACE_ME"
+      PROXY_API_KEY: "REPLACE_ME"
+      CHAT_MODEL: "gpt-4o"
+      EMBEDDING_MODEL: "text-embedding-3-large"
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    build-parameters:
+      builder: npm
+      ignore: ["node_modules/"]
+
+  - name: genai-hana-rag-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: hana-hdi-rag
+    build-parameters:
+      ignore: ["node_modules/"]
+
+  - name: genai-hana-rag-app
+    type: staticfile
+    path: app/webapp
+    parameters:
+      buildpack: staticfile_buildpack
+      memory: 64M
+    build-parameters:
+      builder: custom
+      commands: []
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+
+resources:
+  - name: hana-hdi-rag
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+      config:
+        database_id: 1159f744-6592-4c54-a96e-a6a924da3fbb

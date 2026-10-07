@@ -1,0 +1,56 @@
+###############################################################################
+# USER CONFIGURATION - MTA Extension File
+#
+# INSTRUCTIONS:
+# 1. Edit user-config.json with your values
+# 2. Run: ./setup-deployment.sh --config
+# 3. The script will build, deploy, and bind AI Core automatically
+#
+# PLACEHOLDERS TO REPLACE:
+#   <YOUR_USERNAME>         - Your unique username (lowercase, no spaces)
+#   <YOUR_REGION>           - CF region (e.g., eu10, us10, eu20, eu10-004)
+#   <YOUR_DATABASE_ID>      - Your HANA Cloud database ID (UUID format)
+#   <YOUR_AICORE_SERVICE>   - Shared AI Core service instance name (e.g., ch-sbb-aicore)
+#
+# NAMING CONVENTION (via --namespace flag):
+#   CF App (service):    <YOUR_USERNAME>-genai-hana-rag-srv
+#   CF App (webapp):     <YOUR_USERNAME>-genai-hana-rag-app
+#   CF App (deployer):   <YOUR_USERNAME>-genai-hana-rag-db-deployer
+#   HDI Container:       <YOUR_USERNAME>-hana-hdi-rag
+#   AI Core:             ch-sbb-aicore (shared, not namespaced)
+#
+# DEPLOY COMMAND:
+#   cf deploy mta_archives/genai-hana-rag_1.0.0.mtar -e my-deployment.mtaext --namespace <YOUR_USERNAME>
+#
+# UNDEPLOY COMMAND:
+#   cf undeploy genai-hana-rag --namespace <YOUR_USERNAME> --delete-services --delete-service-keys
+###############################################################################
+
+_schema-version: "3.1"
+ID: genai-hana-rag
+extends: genai-hana-rag
+
+modules:
+  # Service module - custom route for unique URL
+  - name: genai-hana-rag-srv
+    parameters:
+      routes:
+        - route: <YOUR_USERNAME>-genai-hana-rag-srv.cfapps.<YOUR_REGION>.hana.ondemand.com
+
+  # Web app module - custom route for unique URL
+  - name: genai-hana-rag-app
+    parameters:
+      routes:
+        - route: <YOUR_USERNAME>-genai-hana-rag-app.cfapps.<YOUR_REGION>.hana.ondemand.com
+
+resources:
+  # HDI container - database_id configuration (will be namespaced)
+  - name: hana-hdi-rag
+    parameters:
+      config:
+        database_id: <YOUR_DATABASE_ID>
+
+  # AI Core - DISABLED to prevent namespace prefix
+  # Will be bound automatically by deployment script
+  - name: aicore
+    active: false

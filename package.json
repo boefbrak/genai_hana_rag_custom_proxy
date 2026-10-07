@@ -1,0 +1,47 @@
+{
+  "name": "genai-hana-rag",
+  "version": "1.0.0",
+  "description": "RAG Application with SAP CAP, HANA Vector Engine, and Generative AI Hub",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^8",
+    "@cap-js/hana": "^1",
+    "openai": "^4",
+    "express": "^4",
+    "multer": "1.4.4-lts.1",
+    "pdf-parse": "^1",
+    "csv-parse": "^5"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^8",
+    "@cap-js/sqlite": "^1"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "build": "cds build --production",
+    "watch": "cds watch"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sql",
+        "[production]": {
+          "kind": "hana-cloud",
+          "deploy-format": "hdbtable"
+        },
+        "[hybrid]": {
+          "kind": "hana-cloud",
+          "deploy-format": "hdbtable"
+        }
+      },
+      "auth": {
+        "[production]": {
+          "kind": "dummy"
+        }
+      }
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
+    }
+  }
+}

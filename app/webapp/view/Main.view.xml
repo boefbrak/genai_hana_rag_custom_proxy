@@ -1,0 +1,131 @@
+<mvc:View
+    controllerName="genai.rag.app.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified"
+    xmlns:l="sap.ui.layout">
+
+    <Page title="RAG Chat Assistant" showHeader="true" class="mainPage">
+        <content>
+            <l:Splitter orientation="Horizontal" height="100%">
+                <!-- Left Panel: Documents -->
+                <l:contentAreas>
+                    <VBox width="350px" class="documentsPanel">
+                        <Toolbar class="sapUiSmallMarginBottom">
+                            <Title text="Documents" level="H4"/>
+                            <ToolbarSpacer/>
+                            <Button
+                                id="sortToggle"
+                                icon="{= ${app>/sortDescending} ? 'sap-icon://sort-descending' : 'sap-icon://sort-ascending'}"
+                                tooltip="{= ${app>/sortDescending} ? 'Newest first' : 'Oldest first'}"
+                                press=".onToggleSort"
+                                type="Transparent"/>
+                            <Button icon="sap-icon://add" tooltip="Upload Document" press=".onOpenUploadDialog" type="Transparent"/>
+                        </Toolbar>
+
+                        <List
+                            id="documentList"
+                            mode="SingleSelectMaster"
+                            selectionChange=".onDocumentSelect"
+                            items="{documents>/value}"
+                            noDataText="No documents uploaded yet"
+                            class="documentsList">
+                            <ObjectListItem
+                                title="{documents>fileName}"
+                                number="{documents>chunkCount}"
+                                numberUnit="chunks"
+                                type="Active">
+                                <attributes>
+                                    <ObjectAttribute text="{documents>fileType}"/>
+                                    <ObjectAttribute text="{path: 'documents>fileSize', formatter: '.formatter.formatFileSize'}"/>
+                                </attributes>
+                                <firstStatus>
+                                    <ObjectStatus
+                                        text="{documents>status}"
+                                        state="{= ${documents>status} === 'READY' ? 'Success' : ${documents>status} === 'ERROR' ? 'Error' : 'Warning'}"/>
+                                </firstStatus>
+                            </ObjectListItem>
+                        </List>
+                    </VBox>
+                </l:contentAreas>
+
+                <!-- Right Panel: Chat -->
+                <l:contentAreas>
+                    <VBox height="100%" width="100%" class="chatPanel">
+                        <!-- Empty State (no document selected) -->
+                        <FlexBox
+                            id="emptyState"
+                            visible="{= !${app>/selectedDocumentId}}"
+                            height="100%"
+                            alignItems="Center"
+                            justifyContent="Center"
+                            direction="Column"
+                            class="emptyState">
+                            <core:Icon src="sap-icon://document" size="4rem" class="emptyStateIcon"/>
+                            <Title text="Select a document to start chatting" level="H3" class="sapUiMediumMarginTop"/>
+                            <Text text="Choose a document from the left panel or upload a new one" class="sapUiSmallMarginTop"/>
+                            <Button
+                                text="Upload Document"
+                                icon="sap-icon://upload"
+                                press=".onOpenUploadDialog"
+                                type="Emphasized"
+                                class="sapUiMediumMarginTop"/>
+                        </FlexBox>
+
+                        <!-- Chat Area (READY document selected) -->
+                        <VBox id="chatArea" visible="{= !!${app>/selectedDocumentId}}" height="100%">
+                            <!-- Document Info Header -->
+                            <Toolbar class="documentHeader">
+                                <core:Icon src="sap-icon://document"/>
+                                <Title text="{app>/selectedDocumentName}" level="H5"/>
+                                <ToolbarSpacer/>
+                                <Button icon="sap-icon://delete" tooltip="Delete Document" press=".onDeleteDocument" type="Reject"/>
+                                <Button icon="sap-icon://decline" tooltip="Close Chat" press=".onCloseChat" type="Transparent"/>
+                            </Toolbar>
+
+                            <!-- Messages area -->
+                            <VBox height="100%" width="100%" class="chatArea">
+                                <ScrollContainer id="chatScroll" height="100%" vertical="true" class="chatMessages">
+                                    <List
+                                        id="messageList"
+                                        items="{messages>/}"
+                                        showNoData="false"
+                                        showSeparators="None">
+                                        <CustomListItem class="{= ${messages>role} === 'user' ? 'chatMessageUser' : 'chatMessageAssistant'}">
+                                            <VBox class="messageContent">
+                                                <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                                    <core:Icon
+                                                        src="{= ${messages>role} === 'user' ? 'sap-icon://person-placeholder' : 'sap-icon://da-2'}"
+                                                        size="1rem"
+                                                        class="sapUiTinyMarginEnd"/>
+                                                    <Label text="{= ${messages>role} === 'user' ? 'You' : 'Assistant'}" design="Bold"/>
+                                                </HBox>
+                                                <Text text="{messages>content}" class="messageText"/>
+                                            </VBox>
+                                        </CustomListItem>
+                                    </List>
+                                </ScrollContainer>
+
+                                <!-- Input Bar -->
+                                <Toolbar class="chatInputBar">
+                                    <Input
+                                        id="messageInput"
+                                        placeholder="Ask a question about this document..."
+                                        width="100%"
+                                        submit=".onSendMessage"
+                                        enabled="{= !!${app>/currentSessionId}}"/>
+                                    <Button
+                                        icon="sap-icon://paper-plane"
+                                        press=".onSendMessage"
+                                        type="Emphasized"
+                                        enabled="{= !!${app>/currentSessionId}}"/>
+                                </Toolbar>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </l:contentAreas>
+            </l:Splitter>
+        </content>
+    </Page>
+</mvc:View>

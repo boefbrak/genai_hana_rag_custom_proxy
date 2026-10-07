@@ -1,0 +1,16 @@
+node_modules/
+gen/
+mta_archives/
+default-env.json
+*.mtar
+
+# User-specific deployment files (keep templates)
+my-deployment.mtaext
+docs/SAP-CAP-RAG-Tutorial/00-introduction.md
+docs/SAP-CAP-RAG-Tutorial/01-project-setup.md
+docs/SAP-CAP-RAG-Tutorial/02-database-model.md
+docs/SAP-CAP-RAG-Tutorial/03-backend-services.md
+docs/SAP-CAP-RAG-Tutorial/04-ai-integration.md
+docs/SAP-CAP-RAG-Tutorial/05-frontend-ui.md
+docs/SAP-CAP-RAG-Tutorial/06-deployment.md
+docs/SAP-CAP-RAG-Tutorial/07-testing.md

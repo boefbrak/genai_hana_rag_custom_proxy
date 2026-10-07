@@ -1,0 +1,60 @@
+<mvc:View
+    controllerName="genai.rag.app.controller.Upload"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified">
+    <Page title="Document Management" showNavButton="true" navButtonPress=".onNavBack">
+        <headerContent>
+            <Button text="Chat" icon="sap-icon://discussion" press=".onNavToChat" type="Emphasized"/>
+        </headerContent>
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <Panel headerText="Upload Documents" class="sapUiSmallMarginBottom">
+                    <VBox class="sapUiSmallMargin">
+                        <u:FileUploader
+                            id="fileUploader"
+                            fileType="pdf,txt,csv"
+                            maximumFileSize="10"
+                            placeholder="Choose a PDF, TXT, or CSV file (max 10 MB)"
+                            width="100%"
+                            typeMissmatch=".onTypeMismatch"
+                            fileSizeExceed=".onFileSizeExceed"/>
+                        <Button
+                            text="Upload"
+                            icon="sap-icon://upload"
+                            press=".onUpload"
+                            type="Emphasized"
+                            class="sapUiSmallMarginTop"/>
+                    </VBox>
+                </Panel>
+
+                <Panel headerText="Uploaded Documents">
+                    <List
+                        id="documentList"
+                        noDataText="No documents uploaded yet"
+                        items="{documents>/value}">
+                        <ObjectListItem
+                            title="{documents>fileName}"
+                            number="{documents>chunkCount}"
+                            numberUnit="chunks"
+                            type="Active"
+                            press=".onDocumentPress">
+                            <attributes>
+                                <ObjectAttribute text="{documents>fileType}"/>
+                                <ObjectAttribute text="{
+                                    path: 'documents>fileSize',
+                                    formatter: '.formatter.formatFileSize'
+                                }"/>
+                            </attributes>
+                            <firstStatus>
+                                <ObjectStatus
+                                    text="{documents>status}"
+                                    state="{= ${documents>status} === 'READY' ? 'Success' : ${documents>status} === 'ERROR' ? 'Error' : 'Warning'}"/>
+                            </firstStatus>
+                        </ObjectListItem>
+                    </List>
+                </Panel>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

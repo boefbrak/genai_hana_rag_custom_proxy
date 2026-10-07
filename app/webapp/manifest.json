@@ -1,0 +1,40 @@
+{
+  "sap.app": {
+    "id": "genai.rag.app",
+    "type": "application",
+    "title": "RAG Chat Assistant",
+    "applicationVersion": { "version": "1.0.0" },
+    "dataSources": {}
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "genai.rag.app.view.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "resources": {
+      "css": [
+        { "uri": "css/style.css" }
+      ]
+    },
+    "models": {},
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "viewPath": "genai.rag.app.view",
+        "controlId": "appControl",
+        "controlAggregation": "pages",
+        "transition": "slide",
+        "async": true
+      },
+      "routes": [
+        { "name": "main", "pattern": "", "target": "main" }
+      ],
+      "targets": {
+        "main": { "viewName": "Main", "viewLevel": 1 }
+      }
+    }
+  }
+}

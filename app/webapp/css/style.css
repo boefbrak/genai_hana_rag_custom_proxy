@@ -1,0 +1,93 @@
+.chatPage .sapMPageEnableScrolling {
+    height: calc(100vh - 4rem);
+}
+
+.chatArea {
+    flex: 1;
+}
+
+.chatMessages {
+    flex: 1;
+    min-height: 0;
+    background-color: #f5f6f7;
+    border-radius: 0.5rem;
+}
+
+.chatInputBar {
+    padding: 0.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.chatMessageUser,
+.chatMessageAssistant {
+    padding: 0.75rem 1rem;
+    margin: 0.5rem;
+    border-radius: 0.75rem;
+    max-width: 80%;
+}
+
+.chatMessageUser {
+    background-color: #0a6ed1;
+    color: #ffffff;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.chatMessageUser .sapMLabel {
+    color: #ffffff;
+}
+
+.chatMessageAssistant {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    align-self: flex-start;
+}
+
+.messageContent {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Side-by-side layout styles */
+.mainPage .sapMPageEnableScrolling {
+    height: calc(100vh - 3rem);
+}
+
+.documentsPanel {
+    border-right: 1px solid #e0e0e0;
+    background-color: #fafafa;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.documentsList {
+    height: calc(100% - 3rem);
+    overflow-y: auto;
+}
+
+.chatPanel {
+    background-color: #ffffff;
+    height: 100%;
+}
+
+/* Sessions panel removed - auto-continue last session */
+
+.documentHeader {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.emptyState {
+    background-color: #fafafa;
+}
+
+.emptyStateIcon {
+    color: #bfbfbf;
+}
+
+.messageText {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Error documents show status in list only, not selectable */

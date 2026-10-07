@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chat Assistant</title>
+    <script src="config.js?v=2"></script>
+    <script id="sap-ui-bootstrap"
+        src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-resourceroots='{"genai.rag.app": "./"}'
+        data-sap-ui-compatVersion="edge"
+        data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
+        data-sap-ui-async="true"
+        data-sap-ui-frameOptions="trusted">
+    </script>
+</head>
+<body class="sapUiBody" role="application">
+    <div data-sap-ui-component
+         data-name="genai.rag.app"
+         data-id="container"
+         data-settings='{"id":"genai.rag.app"}'>
+    </div>
+</body>
+</html>
